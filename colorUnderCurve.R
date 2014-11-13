@@ -39,10 +39,10 @@ color.emp <- function(M,from,to) {
 #Examples: ######################################################
 
 ## color.den
-  x <- rnorm(10000)
-  denx <- density(x)
-  color.den(denx,1,2,col.area="blue")
-  color.den(denx,-1,0,col.area="red",add=T)
+#  x <- rnorm(10000)
+#  denx <- density(x)
+#  color.den(denx,1,2,col.area="blue")
+#  color.den(denx,-1,0,col.area="red",add=T)
 #
 ## color.fn
 #  fn <- function(x) dnorm(x)
