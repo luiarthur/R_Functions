@@ -1,19 +1,24 @@
-my.color <- function(dat,from,to) {
+my.color <- function(dat,from,to,col.den="black",col.area="red",...) {
   if (is(dat)[1] == "function") {
     color.fn(dat,from,to)
   } else if (is(dat)[1] == "density") {
-    color.den(dat,from,to)
+    color.den(dat,from,to,col.den,col.area,...)
   } else if (is(dat)[1] == "matrix") {
     color.emp(dat,from,to)
   }
 }
 
 
-color.den <- function(den,from,to) {
+color.den <- function(den,from,to,col.den="black",col.area="red",add=F,...) {
   # Colors area under a density within an interval
   # den has to be a density object
+  if (add) {
+    lines(den,col=col.den,...)
+  } else {
+    plot(den,col=col.den,...)
+  }
   polygon(c(from, den$x[den$x>=from & den$x<=to], to),
-          c(0, den$y[den$x>=from & den$x<=to], 0),col="red")
+          c(0, den$y[den$x>=from & den$x<=to], 0),col=col.area)
 }
 
 color.fn <- function(f,from,to) {
@@ -34,10 +39,10 @@ color.emp <- function(M,from,to) {
 #Examples: ######################################################
 
 ## color.den
-#  x <- rnorm(10000)
-#  denx <- density(x)
-#  plot(denx)
-#  color.den(denx,-2,5)
+  x <- rnorm(10000)
+  denx <- density(x)
+  color.den(denx,1,2,col.area="blue")
+  color.den(denx,-1,0,col.area="red",add=T)
 #
 ## color.fn
 #  fn <- function(x) dnorm(x)
