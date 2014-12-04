@@ -15,7 +15,7 @@ plot.post <- function(x,main=NULL) {
   rng.x <- range(den$x)
   x.diff <- rng.x[2] - rng.x[1]
 
-  opts <- par()
+  opts <- par(no.readonly=T)
     left <- rng.x[1] + x.diff*2/3
     right <- rng.x[2]
     par(fig = c(grconvertX(c(left,right),from="user",to="ndc"),
