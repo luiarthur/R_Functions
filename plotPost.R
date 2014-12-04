@@ -28,3 +28,7 @@ plot.post <- function(x,main=NULL) {
     axis(2,cex.axis=.5)
   par(opts)
 }
+
+#y <- r(10000,50,.01)
+#plot.post(y,"y")
+
