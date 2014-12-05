@@ -41,18 +41,18 @@ plot.in.plot <- function(minor.plot,coords="topright",scale=1/3) {
   par(opts)
 }
 
-x <- rnorm(10000)
-plot(density(x),ylim=c(0,.5))
-
-minor <- function() {
-  plot(x,type="l",axes=F,main="Trace",cex.main=.8) 
-  axis(1,cex.axis=.5)
-  axis(2,cex.axis=.5)
-}
-
-#plotinplot(minor,c(1,4,.4,.5))
-plot.in.plot(minor,"topright")
-plot.in.plot(minor,"bottomright")
-plot.in.plot(minor,"bottomleft")
-plot.in.plot(minor,"topleft")
+#x <- rnorm(10000)
+#plot(density(x),ylim=c(0,.5))
+#
+#minor <- function() {
+#  plot(x,type="l",axes=F,main="Trace",cex.main=.8) 
+#  axis(1,cex.axis=.5)
+#  axis(2,cex.axis=.5)
+#}
+#
+##plotinplot(minor,c(1,4,.4,.5))
+#plot.in.plot(minor,"topright")
+#plot.in.plot(minor,"bottomright")
+#plot.in.plot(minor,"bottomleft")
+#plot.in.plot(minor,"topleft")
 
