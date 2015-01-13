@@ -38,7 +38,10 @@ unique.matrix <- function(MM) {
       taken[i] <- T
     }
   }
-  list(counts,uniq.M)
+  
+  ind <- sort(counts,index.return=T,decr=T)
+  ind <- ind$ix
+  list(counts[ind],uniq.M[ind])
 }
 
 
