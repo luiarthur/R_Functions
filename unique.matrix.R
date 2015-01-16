@@ -1,4 +1,4 @@
-unique.matrix <- function(X) {
+unique.matrix <- function(MM) {
   # Counts the number of unique matrices in a list.
   # X = a list of matrices. We want the output to be:
   # 1) a list of UNIQUE matrices
