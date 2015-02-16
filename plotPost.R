@@ -41,9 +41,9 @@ int2rgb = function(x){
   col2rgb(hex)
 }
 
-plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue") {
+plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",trace=T) {
   mn.x <- round(mean(x),5)
-  v.x <- round(var(x),3)
+  v.x <- round(sd(x),3)
   den <- density(x)
   rng <- c(min(den$y),max(den$y))
 
@@ -53,20 +53,9 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue") {
   plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,
        main=main)
   legend("topleft",legend=c(paste("Mean =",mn.x),
-                            paste("Variance = ",v.x)),bty="n")
+                            paste("Std. Dev. = ",v.x)),bty="n")
   rng.x <- range(den$x)
   x.diff <- rng.x[2] - rng.x[1]
-
-  opts <- par(no.readonly=T)
-    left <- rng.x[1] + x.diff*2/3
-    right <- rng.x[2]
-    par(fig = c(grconvertX(c(left,right),from="user",to="ndc"),
-                grconvertY(c(rng[2],rng[2]+diff*.3),from="user",to="ndc")),
-        mar = c(.1,.1,1,.1), new = TRUE)
-    plot(x,type="l",col="gray30",cex.main=.5,axes=F,main="Trace Plot")
-    axis(1,cex.axis=.5)
-    axis(2,cex.axis=.5)
-  par(opts)
 
   color.den(den,rng.x[1],rng.x[2],col.den=color,col.area=color,add=T)
   if (hpd) {
@@ -74,10 +63,23 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue") {
     color.den(den,hpd[1],hpd[2],col.den=col.mult(color),
               col.area=col.mult(color),add=T)
   }
-
   lines(c(mn.x,mn.x),c(0,bound(mn.x,den,ret=F)),lwd=2,col="red")
   #abline(v=mn.x,col="red",lwd=2)
+
+  if (trace) {
+    opts <- par(no.readonly=T)
+      left <- rng.x[1] + x.diff*2/3
+      right <- rng.x[2]
+      par(fig = c(grconvertX(c(left,right),from="user",to="ndc"),
+                  grconvertY(c(rng[2],rng[2]+diff*.3),from="user",to="ndc")),
+          mar = c(.1,.1,1,.1), new = TRUE)
+      plot(x,type="l",col="gray30",cex.main=.5,axes=F,main="Trace Plot")
+      axis(1,cex.axis=.5)
+      axis(2,cex.axis=.5)
+    par(opts)
+  }
 }
+
 
 get.hpd <- function(x,a=.05,len=1e3) {
   V <- matrix(seq(0,a,length=len))
