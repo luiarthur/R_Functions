@@ -41,7 +41,8 @@ int2rgb = function(x){
   col2rgb(hex)
 }
 
-plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T) {
+plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
+                      stay=F) {
   mn.x <- round(mean(x),5)
   v.x <- round(sd(x),3)
   den <- density(x)
@@ -66,6 +67,8 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T) 
   lines(c(mn.x,mn.x),c(0,bound(mn.x,den,ret=F)),lwd=2,col="red")
   #abline(v=mn.x,col="red",lwd=2)
 
+  mfg <- par()$mfg
+
   if (trace) {
     opts <- par(no.readonly=T)
       left <- rng.x[1] + x.diff*2/3
@@ -78,8 +81,27 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T) 
       axis(2,cex.axis=.5)
     par(opts)
   }
-}
 
+  if (!(stay)) {
+    row.num <- mfg[1]
+    col.num <- mfg[2]
+    last.row <- mfg[3]
+    last.col <- mfg[4]
+
+    if (col.num < last.col) {
+      mfg[2] <- mfg[2] + 1
+    } else {
+      if (row.num < last.row) {
+        mfg[1] <- mfg[1] + 1
+      } else {
+        mfg[1] <- 1
+      }
+      mfg[2] <- 1
+    }
+  }
+
+  par(mfg=mfg)
+}
 
 
 get.hpd <- function(x,a=.05,len=1e3) {
@@ -91,5 +113,24 @@ get.hpd <- function(x,a=.05,len=1e3) {
   hpd
 }
 
-y <- rgamma(10000,5,1)
-plot.post(y,"y",color="yellow")
+
+plot.posts <- function(M,cex.legend=.7) {
+  k <- ncol(M)
+  set <- par(no.readonly=T)
+  par(mfrow=c(k,k))
+    for (i in 1:k) {
+      if (i>1) {
+        for (j in 1:(i-1)) plot(1, type="n", axes=F, xlab="", ylab="") # empty plot
+      }
+
+      plot.post(out[,i],cex.l=cex.legend)
+
+      if (i<k) {
+        for (j in (i+1):k) {
+          plot(out[,c(i,j)],type="l",col="gray85")
+          plot.contour(out[,c(i,j)],add=T)
+        }
+      }  
+    }
+  par(set)
+}
