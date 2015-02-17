@@ -123,12 +123,12 @@ plot.posts <- function(M,cex.legend=.7,keep.par=F) {
         for (j in 1:(i-1)) plot(1, type="n", axes=F, xlab="", ylab="") # empty plot
       }
 
-      plot.post(out[,i],cex.l=cex.legend)
+      plot.post(M[,i],cex.l=cex.legend)
 
       if (i<k) {
         for (j in (i+1):k) {
-          plot(out[,c(i,j)],type="l",col="gray85")
-          plot.contour(out[,c(i,j)],add=T)
+          plot(M[,c(i,j)],type="l",col="gray85")
+          plot.contour(M[,c(i,j)],add=T)
         }
       }
     }
