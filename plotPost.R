@@ -50,7 +50,7 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
 
   diff <- rng[2]-rng[1]
   main <- ifelse(is.null(main),"Posterior Distribution",
-                         paste("Posterior Distribution for",main))
+                         paste("Posterior Distribution \n for",main))
   plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,
        main=main)
   legend("topleft",legend=c(paste("Mean =",mn.x),
@@ -113,13 +113,14 @@ get.hpd <- function(x,a=.05,len=1e3) {
   hpd
 }
 
+
 plot.contour <- function(M,...) {
   library(MASS) # filled.contour, kde2d
   J <- kde2d(M[,1],M[,2])
   contour(J,...)
 }
 
-plot.posts <- function(M,cex.legend=.7,keep.par=F) {
+plot.posts <- function(M,names=rep(NULL,ncol(M)),cex.legend=.7,keep.par=F) {
   k <- ncol(M)
   set <- par(no.readonly=T)
   par(mfrow=c(k,k))
@@ -127,16 +128,16 @@ plot.posts <- function(M,cex.legend=.7,keep.par=F) {
       if (i>1) {
         for (j in 1:(i-1)) plot(1, type="n", axes=F, xlab="", ylab="") # empty plot
       }
-
-      plot.post(M[,i],cex.l=cex.legend)
+      
+      plot.post(M[,i],cex.l=cex.legend,main=names[i])
 
       if (i<k) {
         for (j in (i+1):k) {
-          plot(M[,c(i,j)],type="l",col="gray85")
-          plot.contour(M[,c(i,j)],add=T)
+          plot(M[,c(j,i)],type="l",col="gray85",xlab=names[j],ylab=names[i],
+               main=paste("Trace & Contour \n",names[i],"vs",names[j]))
+          plot.contour(M[,c(j,i)],add=T)
         }
-      }
+      }  
     }
   if (!(keep.par)) par(set)
 }
-
