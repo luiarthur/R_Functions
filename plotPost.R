@@ -113,6 +113,11 @@ get.hpd <- function(x,a=.05,len=1e3) {
   hpd
 }
 
+plot.contour <- function(M,...) {
+  library(MASS) # filled.contour, kde2d
+  J <- kde2d(M[,1],M[,2])
+  contour(J,...)
+}
 
 plot.posts <- function(M,cex.legend=.7,keep.par=F) {
   k <- ncol(M)
