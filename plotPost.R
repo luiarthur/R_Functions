@@ -41,7 +41,7 @@ int2rgb = function(x){
   col2rgb(hex)
 }
 
-plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",trace=T) {
+plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T) {
   mn.x <- round(mean(x),5)
   v.x <- round(sd(x),3)
   den <- density(x)
@@ -53,7 +53,7 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",trace=T) {
   plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,
        main=main)
   legend("topleft",legend=c(paste("Mean =",mn.x),
-                            paste("Std. Dev. = ",v.x)),bty="n")
+                            paste("Std. Dev. = ",v.x)),bty="n",cex=cex.l)
   rng.x <- range(den$x)
   x.diff <- rng.x[2] - rng.x[1]
 
@@ -79,6 +79,7 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",trace=T) {
     par(opts)
   }
 }
+
 
 
 get.hpd <- function(x,a=.05,len=1e3) {
