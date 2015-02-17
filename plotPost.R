@@ -114,7 +114,7 @@ get.hpd <- function(x,a=.05,len=1e3) {
 }
 
 
-plot.posts <- function(M,cex.legend=.7) {
+plot.posts <- function(M,cex.legend=.7,keep.par=F) {
   k <- ncol(M)
   set <- par(no.readonly=T)
   par(mfrow=c(k,k))
@@ -130,7 +130,8 @@ plot.posts <- function(M,cex.legend=.7) {
           plot(out[,c(i,j)],type="l",col="gray85")
           plot.contour(out[,c(i,j)],add=T)
         }
-      }  
+      }
     }
-  par(set)
+  if (!(keep.par)) par(set)
 }
+
