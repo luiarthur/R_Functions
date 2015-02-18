@@ -120,7 +120,9 @@ plot.contour <- function(M,...) {
   contour(J,...)
 }
 
-plot.posts <- function(M,names=rep(NULL,ncol(M)),cex.legend=.7,keep.par=F) {
+
+plot.posts <- function(M,names=rep(NULL,ncol(M)),digits=4,cex.legend=.7,
+                       keep.par=F) {
   k <- ncol(M)
   corrs <- cor(M)
   set <- par(no.readonly=T)
@@ -128,8 +130,11 @@ plot.posts <- function(M,names=rep(NULL,ncol(M)),cex.legend=.7,keep.par=F) {
     for (i in 1:k) {
       if (i>1) {
         for (j in 1:(i-1)) {
-          plot(1, type="n", axes=F, xlab="", ylab="") # empty plot
-          legend("center",legend=corrs[i,j])
+          plot(1, type="n", axes=F, xlab="", ylab="",
+               main=paste0("Corr (",names[i],",",names[j],")")) # empty plot
+          r <- round(corrs[i,j],digits)
+          cex.cor <- max(.8/strwidth(format(r)) * abs(r),1)
+          text(1,labels=r,cex=cex.cor)
         }  
       }
       
@@ -141,7 +146,8 @@ plot.posts <- function(M,names=rep(NULL,ncol(M)),cex.legend=.7,keep.par=F) {
                main=paste("Trace & Contour \n",names[i],"vs",names[j]))
           plot.contour(M[,c(j,i)],add=T)
         }
-      }  
+      }
     }
   if (!(keep.par)) par(set)
 }
+
