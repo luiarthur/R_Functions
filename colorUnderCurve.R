@@ -1,10 +1,10 @@
 my.color <- function(dat,from,to,col.den="black",col.area="red",...) {
   if (is(dat)[1] == "function") {
-    color.fn(dat,from,to)
+    color.fn(dat,from,to,col.area)
   } else if (is(dat)[1] == "density") {
     color.den(dat,from,to,col.den,col.area,...)
   } else if (is(dat)[1] == "matrix") {
-    color.emp(dat,from,to)
+    color.emp(dat,from,to,col.area)
   }
 }
 
@@ -22,18 +22,18 @@ color.den <- function(den,from,to,col.den="black",col.area="red",add=F,...) {
           col=col.area,border=col.den)
 }
 
-color.fn <- function(f,from,to) {
+color.fn <- function(f,from,to,col.area="red") {
   x <- seq(from,to,by=(to-from)/10000)
   polygon(c(from,x,to),
-          c(0,f(x),0),col="red")
+          c(0,f(x),0),col=col.area,border=F)
 }
 
 
-color.emp <- function(M,from,to) {
+color.emp <- function(M,from,to,col.area="red") {
   x <- M[,1]
   y <- M[,2]
   polygon(c(from,x[x>=from & x<= to],to),
-          c(0,y[x>=from & x<=to],0),col="red")
+          c(0,y[x>=from & x<=to],0),col=col.area,border=F)
 }
 
 
