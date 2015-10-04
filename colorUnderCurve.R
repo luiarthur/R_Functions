@@ -56,4 +56,3 @@ color.emp <- function(M,from,to,col.area="red") {
 #  plot(x,y,type='l')
 #  color.emp(cbind(x,y),-2,5)
 
-
