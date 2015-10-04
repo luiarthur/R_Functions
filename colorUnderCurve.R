@@ -36,6 +36,7 @@ color.emp <- function(M,from,to,col.area="red") {
           c(0,y[x>=from & x<=to],0),col=col.area,border=F)
 }
 
+# Color area between ylo and yhi
 color.btwn <- function(x,ylo,yhi,from,to,col.area="grey") {
   x <- c(x,rev(x))
   y <- c(yhi,rev(ylo))
