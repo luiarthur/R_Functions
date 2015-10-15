@@ -1,8 +1,9 @@
-plot.in.plot <- function(minor.plot,coords="topright",scale=1/3,stay=F) {
+plot.in.plot <- function(minor.plot,coords="topright",scale=1/3,stay=F,bg.col=rgb(0,0,0,0)) {
   # stay: acts like 'add' in the 'plot' function. The default is FALSE.
   # coords = x1,y1,x2,y2
   # minor.plot is a function with no parameters that plots the smaller plot
   mar <- x1 <- x2 <- y1 <- y2 <- NULL
+  rx1 <- rx2 <- ry1 <- ry2 <- NULL
   s <- par("usr")
   if (is.numeric(coords)) {
     x1 <- coords[1]; x2 <- coords[2]
@@ -35,11 +36,24 @@ plot.in.plot <- function(minor.plot,coords="topright",scale=1/3,stay=F) {
 
   mfg <- par()$mfg # NEW
 
+  # For bg col's for minor plots
+  #print(s)
+  #print(c(x1,x2,y1,y2))
+  #mar btlr
+  #rect(x1-grconvertX(mar[3]*.2,from="inch",to="ndc"), 
+  #     y1-grconvertY(mar[1]*.2,from="inch",to="ndc"), 
+  #     x2-grconvertX(mar[4]*.2,from="inch",to="ndc"), 
+  #     y2-grconvertY(mar[2]*.2,from="inch",to="ndc"), 
+  #     col = bg.col, border=NA)
+
   opts <- par(no.readonly=T)
     par(fig = c(grconvertX(c(x1,x2),from="user",to="ndc"),
                 grconvertY(c(y1,y2),from="user",to="ndc")),
         mar = mar, new = TRUE)
+    #print(par("fig"))
+    #print(c(x1,x2,y1,y2))
     minor.plot()
+
     #axis(1,cex.axis=.5)
     #axis(2,cex.axis=.5)
   par(opts)
