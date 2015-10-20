@@ -1,41 +1,4 @@
-my.color <- function(dat,from,to,col.den="black",col.area="red",...) {
-  if (is(dat)[1] == "function") {
-    color.fn(dat,from,to)
-  } else if (is(dat)[1] == "density") {
-    color.den(dat,from,to,col.den,col.area,...)
-  } else if (is(dat)[1] == "matrix") {
-    color.emp(dat,from,to)
-  }
-}
-
-
-color.den <- function(den,from,to,col.den="black",col.area="red",add=F,...) {
-  # Colors area under a density within an interval
-  # den has to be a density object
-  if (add) {
-    #lines(den,col=col.den,...)
-  } else {
-    plot(den,col=col.den,...)
-  }
-  polygon(c(from, den$x[den$x>=from & den$x<=to], to),
-          c(0, den$y[den$x>=from & den$x<=to], 0),
-          col=col.area,border=col.den)
-}
-
-color.fn <- function(f,from,to) {
-  x <- seq(from,to,by=(to-from)/10000)
-  polygon(c(from,x,to),
-          c(0,f(x),0),col="red")
-}
-
-
-color.emp <- function(M,from,to) {
-  x <- M[,1]
-  y <- M[,2]
-  polygon(c(from,x[x>=from & x<= to],to),
-          c(0,y[x>=from & x<=to],0),col="red")
-}
-
+source("colorUnderCurve.R")
 
 bound <- function(x, dens, return.x=TRUE){
   # Mickey Warner: 
@@ -79,7 +42,7 @@ int2rgb = function(x){
   col2rgb(hex)
 }
 
-plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
+plot.post <- function(x,main.big="",hpd=T,color="cornflowerblue",cex.l=1,trace=T,
                       stay=F,tck.dig=4,...) {
   mn.x <- round(mean(x),5)
   v.x <- round(sd(x),3)
@@ -87,8 +50,7 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
   rng <- c(min(den$y),max(den$y))
 
   diff <- rng[2]-rng[1]
-  main <- ifelse(is.null(main),"Posterior Distribution",
-                         paste("Posterior Distribution \n for",main))
+
   if (hpd) {
   } else {
   }
@@ -100,21 +62,21 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
     hpd <- get.hpd(x)
 
     plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,
-         main=main,xaxt="n")
+         main=main.big,xaxt="n",bty="n",fg="grey")
 
     color.den(den,rng.x[1],rng.x[2],col.den=color,col.area=color,add=T)
     color.den(den,hpd[1],hpd[2],col.den=col.mult(color),
               col.area=col.mult(color),add=T) 
     lines(c(mn.x,mn.x),c(0,bound(mn.x,den,ret=F)),lwd=2,col="red")
 
-    axis(1,at=c(hpd,mn.x),labels=round(c(hpd,mn.x),tck.dig),las=0,...)
+    axis(1,at=c(hpd,mn.x),labels=round(c(hpd,mn.x),tck.dig),las=0,fg="grey",...)
     legend("topleft",legend=c(paste("Mean =",mn.x),
                               paste("Std. Dev. =",v.x),
                               paste("Low HPD =",round(hpd[1],4)),
                               paste("Upp HPD =",round(hpd[2],4))),
                               bty="n",cex=cex.l)
   } else {
-    plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,main=main)
+    plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,main=main.big,bty="n",fg="grey")
     color.den(den,rng.x[1],rng.x[2],col.den=color,col.area=color,add=T)
     lines(c(mn.x,mn.x),c(0,bound(mn.x,den,ret=F)),lwd=2,col="red")
     legend("topleft",legend=c(paste("Mean =",mn.x),
@@ -130,10 +92,8 @@ plot.post <- function(x,main=NULL,hpd=T,color="cornflowerblue",cex.l=1,trace=T,
       right <- rng.x[2]
       par(fig = c(grconvertX(c(left,right),from="user",to="ndc"),
                   grconvertY(c(rng[2],rng[2]+diff*.3),from="user",to="ndc")),
-          mar = c(.1,.1,1,.1), new = TRUE)
-      plot(x,type="l",col="gray30",cex.main=.5,axes=F,main="Trace Plot")
-      axis(1,cex.axis=.5)
-      axis(2,cex.axis=.5)
+          mar = c(.1,.1,.1,.1), new = TRUE)
+      plot(x,type="l",col="gray",main="",fg="grey",bty="n",cex.axis=.6)
     par(opts)
   }
 
