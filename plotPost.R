@@ -116,7 +116,7 @@ plot.post <- function(x,main.big="",hpd=T,color="cornflowerblue",cex.l=1,trace=T
   }
 
   par(mfg=mfg)
-  points(0,0,cex=0)
+  if (stay) points(0,0,cex=0)
 }
 
 
