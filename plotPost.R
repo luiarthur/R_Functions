@@ -166,4 +166,5 @@ plot.posts <- function(M,names=rep(NULL,ncol(M)),digits=4,cex.legend=.7,
       }  
     }
   if (!(keep.par)) par(set)
+  points(0,0,cex=0)
 }
