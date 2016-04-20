@@ -43,7 +43,7 @@ int2rgb = function(x){
 }
 
 plot.post <- function(x,main.big="",hpd=T,color="cornflowerblue",cex.l=1,trace=T,
-                      stay=F,tck.dig=4,...) {
+                      stay=F,tck.dig=4,rng.x=NULL,...) {
   mn.x <- round(mean(x),5)
   v.x <- round(sd(x),3)
   den <- density(x)
@@ -55,14 +55,18 @@ plot.post <- function(x,main.big="",hpd=T,color="cornflowerblue",cex.l=1,trace=T
   } else {
   }
 
-  rng.x <- range(den$x)
+  if (is.null(rng.x)) { 
+    rng.x <- range(den$x)
+  } else {
+    rng.x <- quantile(c(range(den$x),x),rng.x)
+  }
   x.diff <- rng.x[2] - rng.x[1]
 
   if (hpd) {
     hpd <- get.hpd(x)
 
     plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,
-         main=main.big,xaxt="n",bty="n",fg="grey")
+         main=main.big,xaxt="n",bty="n",fg="grey",xlim=rng.x)
 
     color.den(den,rng.x[1],rng.x[2],col.den=color,col.area=color,add=T)
     color.den(den,hpd[1],hpd[2],col.den=col.mult(color),
@@ -76,7 +80,7 @@ plot.post <- function(x,main.big="",hpd=T,color="cornflowerblue",cex.l=1,trace=T
                               paste("Upp HPD =",round(hpd[2],4))),
                               bty="n",cex=cex.l)
   } else {
-    plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,main=main.big,bty="n",fg="grey")
+    plot(density(x),col=color,ylim=c(rng[1],rng[2]+diff*.3),lwd=3,main=main.big,bty="n",fg="grey",xlim=rng.x)
     color.den(den,rng.x[1],rng.x[2],col.den=color,col.area=color,add=T)
     lines(c(mn.x,mn.x),c(0,bound(mn.x,den,ret=F)),lwd=2,col="red")
     legend("topleft",legend=c(paste("Mean =",mn.x),
@@ -137,7 +141,7 @@ plot.contour <- function(M,...) {
 }
 
 plot.posts <- function(M,names=rep(NULL,ncol(M)),digits=4,cex.legend=.7,
-                       keep.par=F,tck.dig=4,cex.a=1/ncol(M)) {
+                       keep.par=F,tck.dig=4,cex.a=1/ncol(M),rng.x=NULL) {
   k <- ncol(M)
   corrs <- cor(M)
   set <- par(no.readonly=T)
@@ -155,7 +159,7 @@ plot.posts <- function(M,names=rep(NULL,ncol(M)),digits=4,cex.legend=.7,
         }  
       }
       
-      plot.post(M[,i],cex.l=cex.legend,main=names[i],tck.dig=tck.dig,cex.axis=cex.a)
+      plot.post(M[,i],cex.l=cex.legend,main=names[i],tck.dig=tck.dig,cex.axis=cex.a,rng.x=rng.x)
 
       if (i<k) {
         for (j in (i+1):k) {
