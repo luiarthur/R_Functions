@@ -137,7 +137,7 @@ get.hpd <- function(x,a=.05,len=1e3) {
 plot.contour <- function(M,...) {
   library(MASS) # filled.contour, kde2d
   J <- kde2d(M[,1],M[,2])
-  contour(J,...)
+  contour(J,bty="n",fg="grey"...)
 }
 
 plot.posts <- function(M,names=rep(NULL,ncol(M)),digits=4,cex.legend=.7,
